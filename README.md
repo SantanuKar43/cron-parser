@@ -5,7 +5,7 @@ Allows for slash operators like "1/2" to be processed as "1-{last valid value}/2
 
 ### Features
 - Parses standard UNIX-like cron expressions (minute, hour, day of month, month, day of week)
-- Supports special characters ('*', '-', ',', '/')
+- Supports special characters `("*", "-", ",", "/")`
 - Outputs all valid values for each of the fields as per given the expression
 
 ### Dependencies:
