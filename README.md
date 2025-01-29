@@ -15,24 +15,33 @@ Allows for slash operators like "1/2" to be processed as "1-{last valid value}/2
 ### Build
 From project root, run:
 
-```mvn clean package``` 
+```
+$ mvn clean package
+``` 
 ### Test
 
-```mvn test```
+```
+$ mvn test
+```
 
 ### Run
 - Download jar from releases here - https://github.com/SantanuKar43/cron-parser/releases/tag/v1.0 and run:
 
-```java -jar cronparser-1.0-SNAPSHOT.jar "*/15 0 1,15 * 1-5 /usr/bin/find"```
+```
+$ java -jar cronparser-1.0-SNAPSHOT.jar "*/15 0 1,15 * 1-5 /usr/bin/find"
+```
 
 - If building from the source code, navigate to the project root directory and run:
 
-```java -jar target/cronparser-1.0-SNAPSHOT.jar "*/15 0 1,15 * 1-5 /usr/bin/find"```
+```
+$ mvn clean package
+$ java -jar target/cronparser-1.0-SNAPSHOT.jar "*/15 0 1,15 * 1-5 /usr/bin/find"
+```
 
 - If using Docker, execute the run.sh script from the project root:
 
 ```
-sh run.sh [expression]
+$ sh run.sh [expression]
 ```
 
 ### Sample input-output
