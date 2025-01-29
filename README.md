@@ -32,10 +32,15 @@ From project root, run:
 - If using Docker, execute the run.sh script from the project root:
 
 ```
-sh run.sh "*/15 0 1,15 * 1-5 /usr/bin/find"
+sh run.sh [expression]
 ```
 
-### Output
+### Sample input-output
+input-
+```
+$ sh run.sh "*/15 0 1,15 * 1-5 /usr/bin/find"
+```
+output-
 ```
 minute        0 15 30 45
 hour          0
