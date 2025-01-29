@@ -32,9 +32,8 @@ From project root, run:
 - If using Docker, execute the run.sh script from the project root:
 
 ```
-sh run.sh
+sh run.sh "*/15 0 1,15 * 1-5 /usr/bin/find"
 ```
-- You can modify the run.sh script to provide the desired input.
 
 ### Output
 ```
