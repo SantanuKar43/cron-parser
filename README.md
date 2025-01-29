@@ -21,13 +21,20 @@ From project root, run:
 ```mvn test```
 
 ### Run
-Download jar from release https://github.com/SantanuKar43/cron-parser/releases/tag/v1.0 and run:
+- Download jar from releases here - https://github.com/SantanuKar43/cron-parser/releases/tag/v1.0 and run:
 
 ```java -jar cronparser-1.0-SNAPSHOT.jar "*/15 0 1,15 * 1-5 /usr/bin/find"```
 
-If building source code, go to project root and run:
+- If building from the source code, navigate to the project root directory and run:
 
 ```java -jar target/cronparser-1.0-SNAPSHOT.jar "*/15 0 1,15 * 1-5 /usr/bin/find"```
+
+- If using Docker, execute the run.sh script from the project root:
+
+```
+sh run.sh
+```
+- You can modify the run.sh script to provide the desired input.
 
 ### Output
 ```
