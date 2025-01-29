@@ -3,6 +3,11 @@ Cron expression parser based on https://www.ibm.com/docs/en/db2/12.1?topic=task-
 
 Allows for slash operators like "1/2" to be processed as "1-{last valid value}/2"
 
+### Features
+- Parses standard UNIX-like cron expressions (minute, hour, day of month, month, day of week)
+- Supports special characters ('*', '-', ',', '/')
+- Outputs all valid values for each of the fields as per given the expression
+
 ### Dependencies:
 - Java 21 - https://www.oracle.com/java/technologies/downloads/#java21
 - Maven - https://maven.apache.org/download.cgi
