@@ -21,6 +21,7 @@ public class ExpressionParser {
     }
 
     public Output parse(String expression) {
+        validate(expression);
         Output output = new Output();
         String[] spaceSplitted = expression.split("\\s+");
         if (spaceSplitted.length < 6) {
@@ -38,5 +39,11 @@ public class ExpressionParser {
         }
         output.addOutputField(new StringOutputField("command", command.toString()));
         return output;
+    }
+
+    private void validate(String expression) {
+        if (expression == null || expression.isBlank()) {
+            throw new IllegalArgumentException("Expression can't be empty");
+        }
     }
 }

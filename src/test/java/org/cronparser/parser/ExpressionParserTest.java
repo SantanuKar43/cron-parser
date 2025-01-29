@@ -54,4 +54,9 @@ public class ExpressionParserTest {
         expressionParser.parse("*/15 0 1,15 * /usr/bin/find");
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void test_invalidCharacter() {
+        expressionParser.parse("*/15 0 1,15 * SUN /usr/bin/find");
+    }
+
 }

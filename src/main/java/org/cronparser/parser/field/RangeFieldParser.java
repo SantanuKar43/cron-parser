@@ -3,6 +3,7 @@ package org.cronparser.parser.field;
 import org.cronparser.model.RangeOutputField;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Base class for parsing a field in a cron expression.
@@ -10,6 +11,8 @@ import java.util.*;
  * and provide first and last values for the range of values allowed for the field.
  * */
 public abstract class RangeFieldParser {
+
+    private static final Pattern REGEX = Pattern.compile("[\\d,\\-\\/\\*]+");
 
     public RangeOutputField parseExpression(String expr) {
         SortedSet<Integer> result = parse(expr);
@@ -24,6 +27,7 @@ public abstract class RangeFieldParser {
      * Recursively parses a field expression and returns set of valid values.
      * */
     private SortedSet<Integer> parse(String expr) {
+        validate(expr);
         SortedSet<Integer> result = new TreeSet<>();
         if (expr.contains(",")) {
             result.addAll(parseComma(expr));
@@ -37,6 +41,15 @@ public abstract class RangeFieldParser {
             result.addAll(parseInteger(expr));
         }
         return result;
+    }
+
+    private void validate(String expr) {
+        if (expr == null || expr.isBlank()) {
+            throw new IllegalArgumentException("Expression can't be empty");
+        }
+        if (!REGEX.matcher(expr).matches()) {
+            throw new IllegalArgumentException("Expression: " + expr +" doesn't match regex: " + REGEX);
+        }
     }
 
     private SortedSet<Integer> parseInteger(String expr) {
