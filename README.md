@@ -11,9 +11,27 @@ Allows for slash operators like "1/2" to be processed as "1-{last valid value}/2
 From project root, run:
 
 ```mvn clean package``` 
+### Test
+
+```mvn test```
 
 ### Run
-From project root, run:
+Download jar from release https://github.com/SantanuKar43/cron-parser/releases/tag/v1.0 and run:
+
+```java -jar cronparser-1.0-SNAPSHOT.jar "*/15 0 1,15 * 1-5 /usr/bin/find"```
+
+If building source code, go to project root and run:
 
 ```java -jar target/cronparser-1.0-SNAPSHOT.jar "*/15 0 1,15 * 1-5 /usr/bin/find"```
+
+### Output
+```
+minute        0 15 30 45
+hour          0
+day of month  1 15
+month         1 2 3 4 5 6 7 8 9 10 11 12
+day of week   1 2 3 4 5
+command       /usr/bin/find
+
+```
 
