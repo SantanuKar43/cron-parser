@@ -14,6 +14,16 @@ public class RangeFieldParserTest {
 
     private final RangeFieldParser parser = new RangeFieldParser(0, 59, "minute");
 
+    @Test(expected = IllegalArgumentException.class)
+    public void test_nullExpression() {
+        parser.parseExpression(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void test_emptyExpression() {
+        parser.parseExpression("");
+    }
+
     @Test
     public void test_integer_valid() {
         Assert.assertEquals(new TreeSet<>(List.of(10)), parser.parseExpression("10").getRange());
@@ -99,6 +109,11 @@ public class RangeFieldParserTest {
     @Test(expected = IllegalArgumentException.class)
     public void test_slash_invalid_oneArg() {
         parser.parseExpression("1/");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void test_slash_invalid_denominatorZero() {
+        parser.parseExpression("*/0");
     }
 
     @Test

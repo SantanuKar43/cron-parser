@@ -94,7 +94,8 @@ public class RangeFieldParser {
         if (left > right) {
             throw new IllegalArgumentException("invalid range for hyphen expression: " + expr);
         }
-        if (isInRangeOrThrowException(left) && isInRangeOrThrowException(right)) {
+        if (isInRangeOrThrowException(left)
+                && isInRangeOrThrowException(right)) {
             for (int i = left; i <= right; i++) {
                 result.add(i);
             }
@@ -113,9 +114,6 @@ public class RangeFieldParser {
             throw new IllegalArgumentException("invalid slash expression, less than 2 arguments: " + expr);
         }
         SortedSet<Integer> numeratorValues = parse(slashSplitted[0]);
-        if (numeratorValues.isEmpty()) {
-            throw new IllegalArgumentException("invalid slash expression, numerator is empty: " + expr);
-        }
         int start = numeratorValues.getFirst();
         int end = !slashSplitted[0].contains("-") && numeratorValues.size() == 1 ?
                 getLast() : numeratorValues.getLast();
