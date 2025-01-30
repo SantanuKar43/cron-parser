@@ -10,18 +10,36 @@ import java.util.regex.Pattern;
  * Implementations are specific to the field,
  * and provide first and last values for the range of values allowed for the field.
  * */
-public abstract class RangeFieldParser {
+public class RangeFieldParser {
 
-    private static final Pattern REGEX = Pattern.compile("[\\d,\\-\\/\\*]+");
+    private final int first;
+    private final int last;
+    private final String fieldName;
+
+    public RangeFieldParser(int first, int last, String fieldName) {
+        this.first = first;
+        this.last = last;
+        this.fieldName = fieldName;
+    }
+
+    public int getFirst() {
+        return first;
+    }
+
+    public int getLast() {
+        return last;
+    }
+
+    public String getFieldName() {
+        return fieldName;
+    }
+
+    private static final Pattern VALID_CHARACTER_REGEX = Pattern.compile("[\\d,\\-\\/\\*]+");
 
     public RangeOutputField parseExpression(String expr) {
         SortedSet<Integer> result = parse(expr);
         return new RangeOutputField(getFieldName(), result);
     }
-
-    protected abstract Integer getFirst();
-    protected abstract Integer getLast();
-    protected abstract String getFieldName();
 
     /**
      * Recursively parses a field expression and returns set of valid values.
@@ -45,10 +63,10 @@ public abstract class RangeFieldParser {
 
     private void validate(String expr) {
         if (expr == null || expr.isBlank()) {
-            throw new IllegalArgumentException("Expression can't be empty");
+            throw new IllegalArgumentException("expression can't be empty");
         }
-        if (!REGEX.matcher(expr).matches()) {
-            throw new IllegalArgumentException("Expression: " + expr +" doesn't match regex: " + REGEX);
+        if (!VALID_CHARACTER_REGEX.matcher(expr).matches()) {
+            throw new IllegalArgumentException("expression: " + expr +" doesn't match regex: " + VALID_CHARACTER_REGEX);
         }
     }
 
@@ -69,12 +87,12 @@ public abstract class RangeFieldParser {
         SortedSet<Integer> result = new TreeSet<>();
         String[] hyphenSplitted = expr.split("-");
         if (hyphenSplitted.length != 2) {
-            throw new IllegalArgumentException("invalid hyphen expression: " + expr);
+            throw new IllegalArgumentException("invalid hyphen expression, less than 2 arguments: " + expr);
         }
         int left = Integer.parseInt(hyphenSplitted[0]);
         int right = Integer.parseInt(hyphenSplitted[1]);
         if (left > right) {
-            throw new IllegalArgumentException("invalid range: " + expr);
+            throw new IllegalArgumentException("invalid range for hyphen expression: " + expr);
         }
         if (isInRangeOrThrowException(left) && isInRangeOrThrowException(right)) {
             for (int i = left; i <= right; i++) {
@@ -92,18 +110,18 @@ public abstract class RangeFieldParser {
         SortedSet<Integer> result = new TreeSet<>();
         String[] slashSplitted = expr.split("/");
         if (slashSplitted.length != 2) {
-            throw new IllegalArgumentException("invalid slash expression: " + expr);
+            throw new IllegalArgumentException("invalid slash expression, less than 2 arguments: " + expr);
         }
         SortedSet<Integer> numeratorValues = parse(slashSplitted[0]);
         if (numeratorValues.isEmpty()) {
-            throw new IllegalArgumentException("invalid slash expression: " + expr);
+            throw new IllegalArgumentException("invalid slash expression, numerator is empty: " + expr);
         }
         int start = numeratorValues.getFirst();
         int end = !slashSplitted[0].contains("-") && numeratorValues.size() == 1 ?
                 getLast() : numeratorValues.getLast();
         int denominator = Integer.parseInt(slashSplitted[1]);
         if (denominator < 1) {
-            throw new IllegalArgumentException("invalid slash expression: " + expr);
+            throw new IllegalArgumentException("invalid slash expression, denominator < 1: " + expr);
         }
         for (int i = start; i <= end; i += denominator) {
             result.add(i);

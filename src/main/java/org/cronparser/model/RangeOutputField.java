@@ -1,7 +1,6 @@
 package org.cronparser.model;
 
 import java.util.Objects;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.stream.Collectors;
 

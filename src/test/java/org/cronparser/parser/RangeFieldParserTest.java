@@ -1,7 +1,7 @@
 package org.cronparser.parser;
 
 
-import org.cronparser.parser.field.MinuteParser;
+import org.cronparser.parser.field.RangeFieldParser;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,7 +12,7 @@ import java.util.TreeSet;
 
 public class RangeFieldParserTest {
 
-    private final org.cronparser.parser.field.RangeFieldParser parser = new MinuteParser();
+    private final RangeFieldParser parser = new RangeFieldParser(0, 59, "minute");
 
     @Test
     public void test_integer_valid() {

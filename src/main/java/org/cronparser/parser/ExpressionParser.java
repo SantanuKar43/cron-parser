@@ -9,15 +9,15 @@ import java.util.List;
 
 public class ExpressionParser {
 
-    private final List<RangeFieldParser> parsers;
+    private final List<RangeFieldParser> fieldParsers;
 
     public ExpressionParser() {
-        parsers = new ArrayList<>();
-        parsers.add(new MinuteParser());
-        parsers.add(new HourParser());
-        parsers.add(new DayOfMonthParser());
-        parsers.add(new MonthParser());
-        parsers.add(new DayOfWeekParser());
+        this.fieldParsers = new ArrayList<>();
+        this.fieldParsers.add(new RangeFieldParser(0, 59, "minute"));
+        this.fieldParsers.add(new RangeFieldParser(0, 23, "hour"));
+        this.fieldParsers.add(new RangeFieldParser(1, 31, "day of month"));
+        this.fieldParsers.add(new RangeFieldParser(1, 12, "month"));
+        this.fieldParsers.add(new RangeFieldParser(0, 6, "day of week"));
     }
 
     public Output parse(String expression) {
@@ -28,7 +28,7 @@ public class ExpressionParser {
             throw new IllegalArgumentException("expression contains less than 6 arguments: " + expression);
         }
         for (int i = 0; i < 5; i++) {
-            output.addOutputField(parsers.get(i).parseExpression(spaceSplitted[i]));
+            output.addOutputField(this.fieldParsers.get(i).parseExpression(spaceSplitted[i]));
         }
         StringBuilder command = new StringBuilder();
         for (int i = 5; i < spaceSplitted.length; i++) {
