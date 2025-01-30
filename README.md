@@ -7,7 +7,7 @@ Allows for slash operators like "1/2" to be processed as "1-{last valid value}/2
 - Parses standard UNIX-like cron expressions (minute, hour, day of month, month, day of week).
 - Supports special characters `("*", "-", ",", "/")`.
 - Outputs all valid values for each of the fields as per the given expression.
-- All field names and their allowed values -
+- All field names and their allowed values:
 
   | Field name   | Allowed values | Allowed special characters |
   |--------------|----------------|----------------------------|
@@ -32,6 +32,18 @@ From project root, run:
 ```
 $ mvn verify
 ```
+Current code coverage report:
+
+| Package                           | Missed Instructions | Coverage | Missed Branches | Branch Coverage | Complexity Missed | Complexity Covered | Missed Lines | Covered Lines | Missed Methods | Covered Methods | Missed Classes |
+|------------------------------------|---------------------|----------|-----------------|----------------|------------------|------------------|--------------|--------------|---------------|---------------|---------------|
+| org.cronparser.model              | 111                 | 49%      | 10              | 50%            | 20               | 30               | 11           | 40           | 10            | 20            | 4             |
+| org.cronparser                    | 15                  | 0%       | N/A             | N/A            | 2                | 2                | 4            | 4            | 2             | 2             | 1             |
+| org.cronparser.parser.field       | 0                   | 100%     | 1               | 97%            | 1                | 31               | 0            | 70           | 0             | 12            | 1             |
+| org.cronparser.parser             | 0                   | 100%     | 0               | 100%           | 0                | 7                | 0            | 20           | 0             | 3             | 1             |
+
+**Total Coverage Summary**
+- **Instructions:** 82%
+- **Branches:** 83%
 
 
 ### Run
@@ -55,11 +67,11 @@ $ sh run.sh [expression]
 ```
 
 ### Sample input-output
-input-
+input:
 ```
 $ sh run.sh "*/15 0 1,15 * 1-5 /usr/bin/find"
 ```
-output-
+output:
 ```
 minute        0 15 30 45
 hour          0
