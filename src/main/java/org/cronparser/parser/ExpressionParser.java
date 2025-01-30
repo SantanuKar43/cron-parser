@@ -9,6 +9,8 @@ import java.util.List;
 
 public class ExpressionParser {
 
+    private static final String LESS_THAN_6_ARGUMENTS_MESSAGE = "expression contains less than 6 arguments: %s";
+    private static final String EMPTY_EXPRESSION_MESSAGE = "expression can't be empty";
     private final List<RangeFieldParser> fieldParsers;
 
     public ExpressionParser() {
@@ -23,27 +25,20 @@ public class ExpressionParser {
     public Output parse(String expression) {
         validate(expression);
         Output output = new Output();
-        String[] spaceSplitted = expression.split("\\s+");
+        String[] spaceSplitted = expression.split("\\s+", 6);
         if (spaceSplitted.length < 6) {
-            throw new IllegalArgumentException("expression contains less than 6 arguments: " + expression);
+            throw new IllegalArgumentException(String.format(LESS_THAN_6_ARGUMENTS_MESSAGE, expression));
         }
         for (int i = 0; i < 5; i++) {
             output.addOutputField(this.fieldParsers.get(i).parseExpression(spaceSplitted[i]));
         }
-        StringBuilder command = new StringBuilder();
-        for (int i = 5; i < spaceSplitted.length; i++) {
-            command.append(spaceSplitted[i]);
-            if (i != spaceSplitted.length - 1) {
-                command.append(" ");
-            }
-        }
-        output.addOutputField(new StringOutputField("command", command.toString()));
+        output.addOutputField(new StringOutputField("command", spaceSplitted[5]));
         return output;
     }
 
     private void validate(String expression) {
         if (expression == null || expression.isBlank()) {
-            throw new IllegalArgumentException("Expression can't be empty");
+            throw new IllegalArgumentException(EMPTY_EXPRESSION_MESSAGE);
         }
     }
 }

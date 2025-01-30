@@ -2,7 +2,6 @@ package org.cronparser.model;
 
 import java.util.Objects;
 import java.util.SortedSet;
-import java.util.stream.Collectors;
 
 public class RangeOutputField extends OutputField {
     private final SortedSet<Integer> range;
