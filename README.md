@@ -1,5 +1,5 @@
 ## Description
-Cron expression parser loosely based on the format specified here: https://www.ibm.com/docs/en/db2/12.1?topic=task-unix-cron-format
+Cron expression parser loosely based on the format specified here: https://www.ibm.com/docs/en/db2/12.1?topic=task-unix-cron-format and here: https://en.wikipedia.org/wiki/Cron#:~:text=web%20hosting%20environment.-,Cron%20expression,-%5Bedit%5D
 
 Allows for slash operators like "1/2" to be processed as "1-{last valid value}/2"
 
