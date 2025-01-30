@@ -114,9 +114,9 @@ public class RangeFieldParser {
             throw new IllegalArgumentException("invalid slash expression, less than 2 arguments: " + expr);
         }
         SortedSet<Integer> numeratorValues = parse(slashSplitted[0]);
-        int start = numeratorValues.getFirst();
+        int start = numeratorValues.first();
         int end = !slashSplitted[0].contains("-") && numeratorValues.size() == 1 ?
-                getLast() : numeratorValues.getLast();
+                getLast() : numeratorValues.last();
         int denominator = Integer.parseInt(slashSplitted[1]);
         if (denominator < 1) {
             throw new IllegalArgumentException("invalid slash expression, denominator < 1: " + expr);
