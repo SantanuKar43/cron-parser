@@ -31,8 +31,6 @@ public class Output {
 
     @Override
     public String toString() {
-        return outputFields.stream()
-                .map(Objects::toString)
-                .collect(Collectors.joining("\n"));
+        return String.join("\n", outputFields.stream().map(String::valueOf).toList());
     }
 }

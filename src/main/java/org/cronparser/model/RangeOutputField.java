@@ -31,10 +31,7 @@ public class RangeOutputField extends OutputField {
 
     @Override
     public String toString() {
-        return String.format("%s%s",
-                super.toString(),
-                range.stream()
-                .map(Objects::toString)
-                .collect(Collectors.joining(" ")));
+        return super.toString()
+                + String.join(" ", range.stream().map(String::valueOf).toList());
     }
 }

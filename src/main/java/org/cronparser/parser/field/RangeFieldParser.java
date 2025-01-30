@@ -12,9 +12,19 @@ import java.util.regex.Pattern;
  * */
 public class RangeFieldParser {
 
+    private static final Pattern VALID_CHARACTER_REGEX = Pattern.compile("[\\d,\\-\\/\\*]+");
+    private static final String EMPTY_EXPRESSION_MESSAGE = "expression can't be empty";
+    private static final String INVALID_CHARACTERS_MESSAGE = "expression: %s contains invalid characters, should match regex: %s";
+    private static final String INVALID_ARGUMENTS_HYPHEN_MESSAGE = "invalid hyphen expression, less than 2 arguments: %s";
+    private static final String INVALID_RANGE_HYPHEN_MESSAGE = "invalid range for hyphen expression: %s";
+    private static final String INVALID_SLASH_ARGUMENTS_MESSAGE = "invalid slash expression, less than 2 arguments: %s";
+    private static final String INVALID_SLASH_DENOMINATOR_MESSAGE = "invalid slash expression, denominator < 1: %s";
+    private static final String VALUES_OUTSIDE_RANGE_MESSAGE = "expression contains values: %s outside permitted range for field: %s";
+
     private final int first;
     private final int last;
     private final String fieldName;
+
 
     public RangeFieldParser(int first, int last, String fieldName) {
         this.first = first;
@@ -22,19 +32,9 @@ public class RangeFieldParser {
         this.fieldName = fieldName;
     }
 
-    public int getFirst() {
-        return first;
-    }
-
-    public int getLast() {
-        return last;
-    }
-
     public String getFieldName() {
         return fieldName;
     }
-
-    private static final Pattern VALID_CHARACTER_REGEX = Pattern.compile("[\\d,\\-\\/\\*]+");
 
     public RangeOutputField parseExpression(String expr) {
         SortedSet<Integer> result = parse(expr);
@@ -54,7 +54,7 @@ public class RangeFieldParser {
         } else if (expr.contains("-")) {
             result.addAll(parseHyphen(expr));
         }  else if (expr.contains("*")) {
-            result.addAll(parseAsterisk());
+            result.addAll(getAllValues());
         } else {
             result.addAll(parseInteger(expr));
         }
@@ -63,42 +63,36 @@ public class RangeFieldParser {
 
     private void validate(String expr) {
         if (expr == null || expr.isBlank()) {
-            throw new IllegalArgumentException("expression can't be empty");
+            throw new IllegalArgumentException(EMPTY_EXPRESSION_MESSAGE);
         }
         if (!VALID_CHARACTER_REGEX.matcher(expr).matches()) {
-            throw new IllegalArgumentException("expression: " + expr +" doesn't match regex: " + VALID_CHARACTER_REGEX);
+            throw new IllegalArgumentException(String.format(INVALID_CHARACTERS_MESSAGE, expr, VALID_CHARACTER_REGEX));
         }
     }
 
     private SortedSet<Integer> parseInteger(String expr) {
         SortedSet<Integer> result = new TreeSet<>();
         int value = Integer.parseInt(expr);
-        if (isInRangeOrThrowException(value)) {
-            result.add(value);
-        }
+        validateWithinRange(value);
+        result.add(value);
         return result;
-    }
-
-    private SortedSet<Integer> parseAsterisk() {
-        return getAllValues();
     }
 
     private SortedSet<Integer> parseHyphen(String expr) {
         SortedSet<Integer> result = new TreeSet<>();
         String[] hyphenSplitted = expr.split("-");
         if (hyphenSplitted.length != 2) {
-            throw new IllegalArgumentException("invalid hyphen expression, less than 2 arguments: " + expr);
+            throw new IllegalArgumentException(String.format(INVALID_ARGUMENTS_HYPHEN_MESSAGE, expr));
         }
         int left = Integer.parseInt(hyphenSplitted[0]);
         int right = Integer.parseInt(hyphenSplitted[1]);
         if (left > right) {
-            throw new IllegalArgumentException("invalid range for hyphen expression: " + expr);
+            throw new IllegalArgumentException(String.format(INVALID_RANGE_HYPHEN_MESSAGE, expr));
         }
-        if (isInRangeOrThrowException(left)
-                && isInRangeOrThrowException(right)) {
-            for (int i = left; i <= right; i++) {
-                result.add(i);
-            }
+        validateWithinRange(left);
+        validateWithinRange(right);
+        for (int i = left; i <= right; i++) {
+            result.add(i);
         }
         return result;
     }
@@ -111,15 +105,15 @@ public class RangeFieldParser {
         SortedSet<Integer> result = new TreeSet<>();
         String[] slashSplitted = expr.split("/");
         if (slashSplitted.length != 2) {
-            throw new IllegalArgumentException("invalid slash expression, less than 2 arguments: " + expr);
+            throw new IllegalArgumentException(String.format(INVALID_SLASH_ARGUMENTS_MESSAGE, expr));
         }
         SortedSet<Integer> numeratorValues = parse(slashSplitted[0]);
         int start = numeratorValues.first();
         int end = !slashSplitted[0].contains("-") && numeratorValues.size() == 1 ?
-                getLast() : numeratorValues.last();
+                this.last : numeratorValues.last();
         int denominator = Integer.parseInt(slashSplitted[1]);
         if (denominator < 1) {
-            throw new IllegalArgumentException("invalid slash expression, denominator < 1: " + expr);
+            throw new IllegalArgumentException(String.format(INVALID_SLASH_DENOMINATOR_MESSAGE, expr));
         }
         for (int i = start; i <= end; i += denominator) {
             result.add(i);
@@ -138,17 +132,15 @@ public class RangeFieldParser {
 
     private SortedSet<Integer> getAllValues() {
         SortedSet<Integer> set = new TreeSet<>();
-        for (int i = getFirst(); i <= getLast(); i++) {
+        for (int i = this.first; i <= this.last; i++) {
             set.add(i);
         }
         return set;
     }
 
-    private boolean isInRangeOrThrowException(int value) {
-        if (getFirst() <= value && value <= getLast()) {
-            return true;
-        } else {
-            throw new IllegalArgumentException("expression contains values outside permitted range:" + value);
+    private void validateWithinRange(int value) throws IllegalArgumentException {
+        if (value < this.first || value > this.last) {
+            throw new IllegalArgumentException(String.format(VALUES_OUTSIDE_RANGE_MESSAGE, value, fieldName));
         }
     }
 
