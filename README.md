@@ -9,13 +9,13 @@ Allows for slash operators like "1/2" to be processed as "1-{last valid value}/2
 - Outputs all valid values for each of the fields as per the given expression.
 - All field names and their allowed values -
 
-  | Field name   | Allowed values | Special characters |
-  |--------------|----------------|--------------------|
-  | minute       | 0-59           | `*` `,` `/` `-`    |
-  | hour         | 0-23           | `*` `,` `/` `-`    |
-  | day of month | 1-31           | `*` `,` `/` `-`    |
-  | month        | 1-12           | `*` `,` `/` `-`    | 
-  | day of week  | 0-6            | `*` `,` `/` `-`    |
+  | Field name   | Allowed values | Allowed special characters |
+  |--------------|----------------|----------------------------|
+  | minute       | 0-59           | `*` `,` `/` `-`            |
+  | hour         | 0-23           | `*` `,` `/` `-`            |
+  | day of month | 1-31           | `*` `,` `/` `-`            |
+  | month        | 1-12           | `*` `,` `/` `-`            | 
+  | day of week  | 0-6            | `*` `,` `/` `-`            |
 
 ### Dependencies:
 - Java 21 or above - https://www.oracle.com/java/technologies/downloads/#java21
