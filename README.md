@@ -30,8 +30,9 @@ $ mvn clean package
 ### Test
 From project root, run:
 ```
-$ mvn test
+$ mvn verify
 ```
+
 
 ### Run
 - Download jar from releases here - https://github.com/SantanuKar43/cron-parser/releases/tag/v1.0 and run:
