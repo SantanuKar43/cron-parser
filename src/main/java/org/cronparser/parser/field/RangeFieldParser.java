@@ -6,9 +6,8 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * Base class for parsing a field in a cron expression.
- * Implementations are specific to the field,
- * and provide first and last values for the range of values allowed for the field.
+ * Class for parsing a field in a cron expression.
+ * Instances should provide first and last values for the range of values allowed for the field.
  * */
 public class RangeFieldParser {
 
